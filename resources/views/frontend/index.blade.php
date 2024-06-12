@@ -22,6 +22,7 @@
                   <th>ID</th>
                   <th>Name</th>
                   <th>Description</th>
+                  <th>Images</th>
                   <th>Price</th>
                   <th>Stock</th>
                   <th>Is Active</th>
@@ -34,6 +35,7 @@
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->description }}</td>
+                    <td><a href="{{ url('products/'.$product->id.'/upload') }}" class="btn btn-info">Add / View Images</a></td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>{{ $product->is_active == 1 ? 'Active' : 'Inactive' }}</td>
