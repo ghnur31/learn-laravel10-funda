@@ -31,7 +31,7 @@
 
                         <div class="mb-3">
                             <label>Upload Images (Max:20 images only)</label>
-                            <input type="file" name="images[]" multiple class="form-control" />
+                            <input type="file" name="images[]" multiple class="form-control" required/>
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Upload</button>

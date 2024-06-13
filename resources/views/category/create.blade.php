@@ -44,15 +44,33 @@
               </div>
               <div class="mb-3">
                 <label>Upload File/Image</label>
-                <input type="file" name="image" class="form-control" />
+                <input type="file" name="image" class="form-control" id="image" onchange="previewImage(event)">
+                @error('image')<span class="text-danger">{{ $message }}</span>@enderror
+                <div class="mt-2" id="image_preview_container" style="display: none;">
+                  <img id="image_preview" src="#" alt="Image Preview" style="max-width: 200px;">
+                </div>
               </div>  
               <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Save</button>
               </div>
             </form>
           </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Function to preview image after selecting file
+    function previewImage(event) {
+      var reader = new FileReader();
+      reader.onload = function(){
+        var output = document.getElementById('image_preview');
+        output.src = reader.result;
+        document.getElementById('image_preview_container').style.display = 'block'; // Menampilkan preview container setelah gambar diunggah
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
 
 </x-app-web-layout>

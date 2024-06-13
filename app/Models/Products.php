@@ -54,4 +54,14 @@ class Products extends Model
         $this->attributes['name'] = strtolower($value);
         $this->attributes['slug'] = Str::slug($value);
     }
+
+    public function getFormattedPriceAttribute()
+    {
+        return 'Rp. ' . number_format($this->price, 0, ',', '.');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
 }

@@ -6,11 +6,15 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
+
+
 
 class CategoryController extends Controller
 {
     public function index()
     {
+        
         $categories = Category::all();
 
         return view('category.index', compact('categories'));
@@ -30,7 +34,10 @@ class CategoryController extends Controller
             'image' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048'
         ]);
 
-        if($request->hasFile('image')){
+        $path = null;
+        $filename = null;
+
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
@@ -42,11 +49,14 @@ class CategoryController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'is_active' => $request->is_active == true ? 1 : 0,
-            'image' => $path.$filename
+            'image' => $path . $filename
         ]);
 
-        return redirect('/categories/create')->with('success', 'Category created successfully');
+        Alert::success('Success', 'Category created successfully');
+
+        return redirect('/categories')->with('success', 'Category created successfully');
     }
+
 
     public function edit(int $id)
     {
@@ -66,6 +76,10 @@ class CategoryController extends Controller
 
         $category = Category::findOrFail($id);
 
+        // Inisialisasi path dan filename
+        $path = $category->image ? dirname($category->image) . '/' : null;
+        $filename = $category->image ? basename($category->image) : null;
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -73,7 +87,8 @@ class CategoryController extends Controller
             $path = 'uploads/category/';
             $file->move($path, $filename);
 
-            if(File::exists($category->image)){
+            // Hapus file gambar lama jika ada
+            if ($category->image && File::exists($category->image)) {
                 File::delete($category->image);
             }
         }
@@ -81,15 +96,19 @@ class CategoryController extends Controller
         $category->update([
             'name' => $request->name,
             'description' => $request->description,
-            'is_active' => $request->is_active == true ? 1:0,
-            'image' => $path.$filename
+            'is_active' => $request->is_active == true ? 1 : 0,
+            'image' => $path . $filename
         ]);
 
-        return redirect()->back()->with('status', 'Category updated successfully');
+        Alert::success('Success Title', 'Category updated successfully');
+
+        return redirect('/categories')->with('status', 'Category updated successfully');
     }
+
 
     public function destroy(int $id)
     {
+        
         $category = Category::findOrFail($id);
         if(File::exists($category->image)){
             File::delete($category->image);

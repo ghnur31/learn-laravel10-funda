@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class ProductController extends Controller
 {
@@ -12,12 +14,12 @@ class ProductController extends Controller
     {
         $products = Products::all();
 
-        return view('frontend.index', compact('products'));
+        return view('products.index', compact('products'));
     }
 
     public function create()
     {
-        return view('frontend.product-create');
+        return view('products.product-create');
     }
 
     public function store(Request $request)
@@ -42,6 +44,21 @@ class ProductController extends Controller
             'is_active' => $request->is_active == true ? 1 : 0,
         ]);
 
-        return redirect()->back()->with('success', 'Product created successfully');
+        Alert::success('Success', 'Product added successfully');
+
+        return redirect('/products')->with('success', 'Product created successfully');
     }
+
+    public function destroy(int $id)
+    {
+        $product = Products::find($id);
+
+        if ($product) {           
+            $product->delete();
+            return redirect()->back()->with('success', 'Product deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Product not found.');
+        }
+    }
+
 }

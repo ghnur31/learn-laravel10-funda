@@ -4,7 +4,7 @@
     Categories
   </x-slot>
 
-  <div class="container mt-5">
+  <div class="container mt-5 animate__animated animate__fadeIn ">
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -17,7 +17,7 @@
           </div>
           <div class="card-body">
             <table class="table table-bordered table-striped">
-              <thead>
+              <thead class="text-center">
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
@@ -27,10 +27,10 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                @foreach ($categories as $item)
+              <tbody class="text-start align-middle">
+                @foreach ($categories as $index => $item)
                   <tr>
-                    <td>{{ $item->id }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->description }}</td>
                     <td>
@@ -45,8 +45,9 @@
                         <button 
                           type="submit" 
                           class="btn btn-danger"
-                          onclick="return confirm('Are you sure?')">
-                            Delete
+                          data-confirm-delete
+                        >
+                          Delete
                         </button>
                       </form>
                     </td>

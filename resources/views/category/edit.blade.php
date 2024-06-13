@@ -1,7 +1,7 @@
 <x-app-web-layout>
 
   <x-slot:title>
-    Add Categories
+    Edit Category
   </x-slot>
 
   <div class="container mt-5">
@@ -44,15 +44,36 @@
               </div>
               <div class="mb-3">
                 <label>Upload File/Image</label>
-                <input type="file" name="image" class="form-control" />
-              </div> 
+                <input type="file" name="image" class="form-control" id="image" onchange="previewImage(event)">
+                @error('image')<span class="text-danger">{{ $message }}</span>@enderror
+                <div class="mt-2">
+                  <img id="image_preview" src="{{ asset($category->image) }}" alt="Image Preview" style="max-width: 200px;">
+                  <div id="image_name"></div>
+                </div>
+              </div>
               <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Update</button>
               </div>
-        </div>
+            </form>
+          </div>
 
+        </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Function to preview image after selecting file
+    function previewImage(event) {
+      var reader = new FileReader();
+      reader.onload = function(){
+        var output = document.getElementById('image_preview');
+        var nameOutput = document.getElementById('image_name');
+        output.src = reader.result;
+        nameOutput.textContent = event.target.files[0].name; // Menampilkan nama file di bawah gambar
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
 
 </x-app-web-layout>
